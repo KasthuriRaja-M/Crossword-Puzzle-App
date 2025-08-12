@@ -16,17 +16,36 @@ const App: React.FC = () => {
     completedWords: 0,
     totalWords: 0
   });
+  const [timer, setTimer] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   // Generate new crossword on component mount
   useEffect(() => {
     generateNewCrossword();
   }, []);
 
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        setTimer(prev => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isTimerRunning]);
+
   const generateNewCrossword = useCallback(() => {
     const newCrossword = generateCrossword();
     setCrosswordData(newCrossword);
     setSelectedCell(null);
     setCurrentDirection('across');
+    setTimer(0);
+    setIsTimerRunning(true);
     updateGameStats(newCrossword);
   }, []);
 
@@ -250,11 +269,14 @@ const App: React.FC = () => {
     });
 
     if (isCorrect) {
-      alert('Congratulations! You solved the crossword puzzle!');
+      setIsTimerRunning(false);
+      const minutes = Math.floor(timer / 60);
+      const seconds = timer % 60;
+      alert(`Congratulations! You solved the crossword puzzle in ${minutes}:${seconds.toString().padStart(2, '0')}!`);
     } else {
       alert('Not quite right. Keep trying!');
     }
-  }, [crosswordData]);
+  }, [crosswordData, timer]);
 
   const revealSolution = useCallback(() => {
     if (!crosswordData) return;
