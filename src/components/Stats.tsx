@@ -7,11 +7,19 @@ interface StatsProps {
     completedWords: number;
     totalWords: number;
   };
+  timer: number;
+  isTimerRunning: boolean;
 }
 
-const Stats: React.FC<StatsProps> = ({ stats }) => {
+const Stats: React.FC<StatsProps> = ({ stats, timer, isTimerRunning }) => {
   const progressPercentage = stats.totalCells > 0 ? Math.round((stats.filledCells / stats.totalCells) * 100) : 0;
   const wordsProgressPercentage = stats.totalWords > 0 ? Math.round((stats.completedWords / stats.totalWords) * 100) : 0;
+  
+  const formatTime = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className="stats">
@@ -58,6 +66,15 @@ const Stats: React.FC<StatsProps> = ({ stats }) => {
       <div className="stat-item">
         <span className="stat-number">{progressPercentage}%</span>
         <span className="stat-label">Overall Progress</span>
+      </div>
+
+      <div className="stat-item">
+        <span className="stat-number" style={{ color: isTimerRunning ? '#4CAF50' : '#fff' }}>
+          {formatTime(timer)}
+        </span>
+        <span className="stat-label">
+          {isTimerRunning ? '⏱️ Time Elapsed' : '⏸️ Time Paused'}
+        </span>
       </div>
     </div>
   );

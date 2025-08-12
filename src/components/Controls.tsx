@@ -5,13 +5,17 @@ interface ControlsProps {
   onCheckSolution: () => void;
   onRevealSolution: () => void;
   onClearPuzzle: () => void;
+  onToggleTimer: () => void;
+  isTimerRunning: boolean;
 }
 
 const Controls: React.FC<ControlsProps> = ({
   onNewPuzzle,
   onCheckSolution,
   onRevealSolution,
-  onClearPuzzle
+  onClearPuzzle,
+  onToggleTimer,
+  isTimerRunning
 }) => {
   return (
     <div className="controls">
@@ -26,6 +30,9 @@ const Controls: React.FC<ControlsProps> = ({
       </button>
       <button className="btn danger" onClick={onClearPuzzle}>
         Clear Puzzle
+      </button>
+      <button className="btn secondary" onClick={onToggleTimer}>
+        {isTimerRunning ? '⏸️ Pause Timer' : '▶️ Start Timer'}
       </button>
     </div>
   );

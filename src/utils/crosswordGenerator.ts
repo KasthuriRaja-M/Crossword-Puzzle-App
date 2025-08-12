@@ -1,4 +1,4 @@
-import { CrosswordData, Cell, Clue } from '../types/crossword';
+import { CrosswordData } from '../types/crossword';
 
 // Sample crossword data - a simple 5x5 puzzle
 const sampleCrossword: CrosswordData = {

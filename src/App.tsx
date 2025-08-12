@@ -22,7 +22,7 @@ const App: React.FC = () => {
   // Generate new crossword on component mount
   useEffect(() => {
     generateNewCrossword();
-  }, []);
+  }, [generateNewCrossword]);
 
   // Timer effect
   useEffect(() => {
@@ -47,7 +47,7 @@ const App: React.FC = () => {
     setTimer(0);
     setIsTimerRunning(true);
     updateGameStats(newCrossword);
-  }, []);
+  }, [updateGameStats]);
 
   const updateGameStats = useCallback((data: CrosswordData) => {
     const totalCells = data.grid.flat().filter(cell => !cell.isBlack).length;
@@ -60,12 +60,12 @@ const App: React.FC = () => {
     ).length;
 
     setGameStats({ filledCells, totalCells, completedWords, totalWords });
-  }, []);
+  }, [isWordComplete]);
 
-  const isWordComplete = (data: CrosswordData, startRow: number, startCol: number, direction: Direction): boolean => {
+  const isWordComplete = useCallback((data: CrosswordData, startRow: number, startCol: number, direction: Direction): boolean => {
     const word = getWordAtPosition(data, startRow, startCol, direction);
     return word.every(cell => cell.value !== '');
-  };
+  }, []);
 
   const getWordAtPosition = (data: CrosswordData, startRow: number, startCol: number, direction: Direction): Cell[] => {
     const word: Cell[] = [];
@@ -151,7 +151,7 @@ const App: React.FC = () => {
     const newCrosswordData = { ...crosswordData, grid: newGrid };
     setCrosswordData(newCrosswordData);
     updateGameStats(newCrosswordData);
-  }, [crosswordData, selectedCell, currentDirection]);
+  }, [crosswordData, selectedCell, currentDirection, moveToNextCell, moveToPreviousCell, handleArrowKey, updateGameStats]);
 
   const moveToNextCell = useCallback(() => {
     if (!crosswordData || !selectedCell) return;
@@ -290,8 +290,9 @@ const App: React.FC = () => {
 
     const newCrosswordData = { ...crosswordData, grid: newGrid };
     setCrosswordData(newCrosswordData);
+    setIsTimerRunning(false);
     updateGameStats(newCrosswordData);
-  }, [crosswordData]);
+  }, [crosswordData, updateGameStats]);
 
   const clearPuzzle = useCallback(() => {
     if (!crosswordData) return;
@@ -306,8 +307,10 @@ const App: React.FC = () => {
     const newCrosswordData = { ...crosswordData, grid: newGrid };
     setCrosswordData(newCrosswordData);
     setSelectedCell(null);
+    setTimer(0);
+    setIsTimerRunning(true);
     updateGameStats(newCrosswordData);
-  }, [crosswordData]);
+  }, [crosswordData, updateGameStats]);
 
   if (!crosswordData) {
     return (
@@ -327,7 +330,7 @@ const App: React.FC = () => {
         <p>Solve the puzzle by filling in the words!</p>
       </div>
 
-      <Stats stats={gameStats} />
+      <Stats stats={gameStats} timer={timer} isTimerRunning={isTimerRunning} />
 
       <div className="crossword-container">
         <CrosswordGrid
@@ -350,6 +353,8 @@ const App: React.FC = () => {
         onCheckSolution={checkSolution}
         onRevealSolution={revealSolution}
         onClearPuzzle={clearPuzzle}
+        onToggleTimer={() => setIsTimerRunning(!isTimerRunning)}
+        isTimerRunning={isTimerRunning}
       />
     </div>
   );
@@ -361,7 +366,7 @@ const getClueNumberAtPosition = (data: CrosswordData, row: number, col: number, 
     let checkCol = col;
     while (checkCol >= 0 && !data.grid[row][checkCol].isBlack) {
       if (data.grid[row][checkCol].number) {
-        return data.grid[row][checkCol].number;
+        return data.grid[row][checkCol].number || null;
       }
       checkCol--;
     }
@@ -370,7 +375,7 @@ const getClueNumberAtPosition = (data: CrosswordData, row: number, col: number, 
     let checkRow = row;
     while (checkRow >= 0 && !data.grid[checkRow][col].isBlack) {
       if (data.grid[checkRow][col].number) {
-        return data.grid[checkRow][col].number;
+        return data.grid[checkRow][col].number || null;
       }
       checkRow--;
     }
