@@ -1,0 +1,245 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.crossword-container {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+}
+
+.crossword-grid {
+  display: grid;
+  gap: 2px;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.crossword-cell {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  text-transform: uppercase;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.crossword-cell:hover {
+  background: #f0f0f0;
+}
+
+.crossword-cell.selected {
+  background: #4CAF50;
+  color: white;
+}
+
+.crossword-cell.filled {
+  background: #e8f5e8;
+}
+
+.crossword-cell.black {
+  background: #333;
+  border-color: #333;
+}
+
+.crossword-cell.number {
+  font-size: 10px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  color: #666;
+}
+
+.clues-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.clues-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #4CAF50;
+}
+
+.clues-section h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.clue-item {
+  margin-bottom: 10px;
+  padding: 8px;
+  background: white;
+  border-radius: 5px;
+  border-left: 3px solid #4CAF50;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clue-item:hover {
+  background: #e8f5e8;
+  transform: translateX(5px);
+}
+
+.clue-item.selected {
+  background: #4CAF50;
+  color: white;
+}
+
+.clue-number {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  margin: 0 10px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.secondary {
+  background: #2196F3;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.btn.secondary:hover {
+  background: #1976D2;
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn.danger {
+  background: #f44336;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.btn.danger:hover {
+  background: #d32f2f;
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0;
+  color: white;
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .crossword-container {
+    padding: 15px;
+  }
+  
+  .crossword-cell {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  
+  .clues-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
